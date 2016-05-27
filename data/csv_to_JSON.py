@@ -18,12 +18,15 @@ def main(argv):
 				colnum = 0
 				row_dict = {}
 				for col in row:
-					row_dict[header[colnum]] = col
+					try:
+						row_dict[header[colnum]] = int(col)
+					except:
+						row_dict[header[colnum]] = col
 					colnum += 1
 				rows.append(row_dict)
 			rownum += 1
 
-	json_filename = csv_filename.replace('.csv', '_json.txt')
+	json_filename = csv_filename.replace('.csv', '.json')
 	with open(json_filename, 'w+') as outfile:
 		json.dump(rows, outfile)
 
