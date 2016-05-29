@@ -1,7 +1,7 @@
 
 function matrix(json) {
   var rows = [];
-  nodes = json.nodes;
+  nodes = json;
   n = nodes.length;
   // Compute index per node.
   nodes.forEach(function(node, i) {
@@ -16,6 +16,22 @@ function matrix(json) {
   y.domain(d3.range(n));
   x.domain(d3.range(10));
 
+  var columns = ["High school/ GED", "Bachelor's degree", "Teaching certificate", "State-specific tests", "For one<br/>school", "For one<br/>teacher", 
+    "District/ Superintendent", "Past<br/>employer", "School", "Thumbprint required"];
+
+  var column_labels = d3.select("#cols")
+    .attr("transform", "translate(0,0)")
+    .selectAll(".colLabel")
+    .data(columns)
+      .enter().append("div")
+      .style("display", "inline-block")
+      .html(function(d) { return d; })
+      .attr("class", "colLabel")
+      .attr("id", function(d,i) { return "col" + i; })
+      .style("width", x.rangeBand() + "px")
+      .style("height","20px")
+      .style("margin-right", "1.5px")
+
   var row = svg.selectAll(".row")
       .data(nodes)
     .enter().append("g")
@@ -24,8 +40,8 @@ function matrix(json) {
       .attr("transform", function(d, i) { return "translate(0," + y(i) + ")"; })
       .each(row);
 
-  row.append("line")
-      .attr("x2", width);
+  // row.append("line")
+  //     .attr("x2", width);
 
   row.append("text")
       .attr("x", -6)
@@ -54,10 +70,10 @@ function matrix(json) {
 
   function getValArray(obj){
     valArr = [];
-    valArr.push(obj.hs_ged);
-    valArr.push(obj.bach);
-    valArr.push(obj.teacher_cert);
-    valArr.push(obj.add_test_req);
+    valArr.push(obj.hs_ged == 1 ? 1 : 0);
+    valArr.push(obj.bach == 1 ? 1 : 0);
+    valArr.push(obj.teacher_cert == 1 ? 1 : 0);
+    valArr.push(obj.add_test_req == 1 ? 1 : 0);
     if (obj.consec_day_rec == 1){
       if (obj.teacher_overall == 0){
         valArr.push(0); //overall limit
@@ -100,7 +116,6 @@ function matrix(json) {
     valArr.push(obj.thumbprint);
     return valArr;
   }
-
   
 
   function row(row) {
@@ -183,14 +198,92 @@ function matrix(json) {
   // matrix.timeout = timeout;
   
   // return matrix;
+
+  //initial order
+  iorder = [];
+  for (i = 0; i < n; i++){
+    var vals = getValArray(nodes[i]);
+    vals.push(nodes[i].id);
+    iorder[i] = vals;
+  }
+
+  var orders = {
+    0: d3.range(n).sort(function(a, b) { return iorder[b][0] - iorder[a][0]; }),
+    1: d3.range(n).sort(function(a, b) { return iorder[b][1] - iorder[a][1]; }),
+    2: d3.range(n).sort(function(a, b) { return iorder[b][2] - iorder[a][2]; }),
+    3: d3.range(n).sort(function(a, b) { return iorder[b][3] - iorder[a][3]; }),
+    4: d3.range(n).sort(function(a, b) { return iorder[b][4] - iorder[a][4]; }),
+    5: d3.range(n).sort(function(a, b) { return iorder[b][5] - iorder[a][5]; }),
+    6: d3.range(n).sort(function(a, b) { return iorder[b][6] - iorder[a][6]; }),
+    7: d3.range(n).sort(function(a, b) { return iorder[b][7] - iorder[a][7]; }),
+    8: d3.range(n).sort(function(a, b) { return iorder[b][8] - iorder[a][8]; }),
+    9: d3.range(n).sort(function(a, b) { return iorder[b][9] - iorder[a][9]; })
+
+  };
+
+  function order(col){
+    y.domain(orders[col]);
+    var t = svg.transition().duration(1500);
+
+    t.selectAll(".row")
+      .delay(function(d, i) { return y(d.index) * 4; })
+      .attr("transform", function(d, i) { return "translate(0," + y(d.index) + ")"; });
+
+  }
+
+  matrix = {}
+  matrix.order = order;
+
+  var timeout = setTimeout(function() {}, 1000);
+  matrix.timeout = timeout;
+
+  return matrix;
+
 }
 
 
 function loadJson(json) {
     var mat = matrix(json);
 
-    // d3.select("#order").on("change", function() {
-	   // mat.order(this.value);
-    // });
+    d3.select("#col0").on("click", function() {
+	    mat.order(0);
+    });
+
+    d3.select("#col1").on("click", function() {
+      mat.order(1);
+    });
+
+    d3.select("#col2").on("click", function() {
+      mat.order(2);
+    });
+
+    d3.select("#col3").on("click", function() {
+      mat.order(3);
+    });
+
+    d3.select("#col4").on("click", function() {
+      mat.order(4);
+    });
+
+    d3.select("#col5").on("click", function() {
+      mat.order(5);
+    });
+
+    d3.select("#col6").on("click", function() {
+      mat.order(6);
+    });
+
+    d3.select("#col7").on("click", function() {
+      mat.order(7);
+    });
+
+    d3.select("#col8").on("click", function() {
+      mat.order(8);
+    });
+
+    d3.select("#col9").on("click", function() {
+      mat.order(9);
+    });
+
 
 }
