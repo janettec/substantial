@@ -42,12 +42,13 @@ svg {
 .title{
   text-align: center;
   background-color: #10FFD1;
-  width: 100%;
+  /*width: 70%;*/
   margin: 30px 0px 30px 0px; 
-  padding:3px;
+  padding:3px 30px 3px 30px;
   font: 30px "Roboto-light";
   color:white;
-  letter-spacing: 5px;
+  letter-spacing: 4px;
+  display:inline-block;
 }
 
 #emp{
@@ -130,4 +131,12 @@ svg {
 
 #axis_label_div{
   margin-bottom:-20px;
+}
+
+.title_accent{
+  background-color: #ACFF21;
+  display: inline-block;
+  font: 30px "Roboto-light";
+  color:#ACFF21;
+  padding:3px;
 }
