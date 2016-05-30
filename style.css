@@ -21,6 +21,12 @@ body {
   font-family: "Roboto", serif;
   /*margin: 1em auto 4em auto;*/
   margin: 0em 0em 0em 0em;
+  overflow-x: hidden;
+  white-space: nowrap;
+}
+
+footer{
+  margin: 20px;
 }
 
 
@@ -38,9 +44,10 @@ svg {
   background-color: #10FFD1;
   width: 100%;
   margin: 30px 0px 30px 0px; 
-  padding:5px;
+  padding:3px;
   font: 30px "Roboto-light";
   color:white;
+  letter-spacing: 5px;
 }
 
 #emp{
@@ -50,7 +57,20 @@ svg {
 }
 
 #right{
-  margin-left: 100px;
+  display:inline-block;
+  margin-left: -100px;
+  /*position: fixed;*/
+}
+
+#left{
+  display:inline-block;
+  /*position:fixed;*/
+}
+
+#middle{
+  display:inline-block;
+  margin-left:-30px;
+  font-size: 10px;
 }
 
 
@@ -58,4 +78,56 @@ svg {
   text-align: center;
   font-size: 10px;
   cursor: pointer;
+  white-space: normal;
+}
+
+.background path {
+  fill: none;
+  stroke: #ddd;
+  shape-rendering: crispEdges;
+}
+
+.foreground path {
+  fill: none;
+  stroke: steelblue;
+}
+
+.brush .extent {
+  fill-opacity: .3;
+  stroke: #fff;
+  shape-rendering: crispEdges;
+}
+
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.axis path {
+  fill: none;
+  stroke: #555;
+  shape-rendering: crispEdges;
+  stroke-width:3px;
+}
+
+#axis0 line,
+#axis0 path {
+  stroke: #fff;
+}
+
+.axis text {
+  /*text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;*/
+  cursor: move;
+}
+
+.axis_label{
+  font-size: 15px;
+  padding-bottom: 20px;
+  display:inline-block;
+  text-align: center;
+}
+
+#axis_label_div{
+  margin-bottom:-20px;
 }

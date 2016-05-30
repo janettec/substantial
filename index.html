@@ -10,23 +10,34 @@
 }
 
 </style>
-<script src="//jdfekete.github.io/reorder.js/lib/d3.v3.js"></script>
+<!-- <script src="//jdfekete.github.io/reorder.js/lib/d3.v3.js"></script> -->
+<script src="//d3js.org/d3.v3.min.js"></script>
 <script src="matrix.js"></script>
 
 <div class = "title">THE <span id = "emp">(UNGREAT)</span> STATE OF SUBSTITUTE TEACHING TODAY</div>
 
+<div id = "left">
+<div id = "axis_label_div"></div>
+<div id = "parallel"></div>
+</div>
+
+<!-- <div id = "middle">
+</div>
+ -->
 <div id = "right">
 <div id = "col_div"></div>
 <div id = "matrix"></div>
 </div>
 
-<script>
-  var margin = {top: 0, right: 0, bottom: 10, left: 80},
-      width = 720,
-      height = 720;
 
-  var x = d3.scale.ordinal().rangeBands([0, width], .02, 0);
-  var y = d3.scale.ordinal().rangeBands([0, height], .3, 0);
+
+<script>
+  var margin = {top: 0, right: 0, bottom: 10, left: 0},
+      width = 720,
+      height = 770;
+
+  var x_scale = d3.scale.ordinal().rangeBands([0, width], .02, 0);
+  var y_scale = d3.scale.ordinal().rangeBands([0, height], .3, 0);
 
   var column_labels = d3.select("#col_div").append("g")
     .attr("id", "cols");
@@ -41,11 +52,16 @@
 
   d3.json("data/requirements.json", loadJson);
 
+  // var state_abrvs = ["AK", "AL", "AR", "AZ", "CA", "CO", "CT", "DC", "DE", "FL", "GA", "HI", "IA", "ID", "IL", "IN", "KS", "KY", "LA", "MA", "MD", "ME", "MI", "MN", "MO", "MS", "MT", "NC", "ND", "NE", "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VA", "VT", "WA", "WI", "WV", "WY"];
+
+  // var state_elems = d3.select("#middle").selectAll(".state")
+  //     .data(state_abrvs)
+  //   .enter().append("p")
+  //   .style("margin", "3.5px")
+  //   .html(function(d) { return d; });
+
+
 </script>
 
+<script src="parallel.js"></script>
 
-<footer>
-  <aside>2016</aside>
-  <p>Gloria Chua</p>
-  <p>Janette Cheng</p>
-</footer>

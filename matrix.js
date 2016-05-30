@@ -13,8 +13,8 @@ function matrix(json) {
       .attr("width", width)
       .attr("height", height);
 
-  y.domain(d3.range(n));
-  x.domain(d3.range(10));
+  y_scale.domain(d3.range(n));
+  x_scale.domain(d3.range(10));
 
   var columns = ["High school/ GED", "Bachelor's degree", "Teaching certificate", "State-specific tests", "For one<br/>school", "For one<br/>teacher", 
     "District/ Superintendent", "Past<br/>employer", "School", "Thumbprint required"];
@@ -28,7 +28,7 @@ function matrix(json) {
       .html(function(d) { return d; })
       .attr("class", "colLabel")
       .attr("id", function(d,i) { return "col" + i; })
-      .style("width", x.rangeBand() + "px")
+      .style("width", x_scale.rangeBand() + "px")
       .style("height","20px")
       .style("margin-right", "1.5px")
 
@@ -37,7 +37,7 @@ function matrix(json) {
     .enter().append("g")
       .attr("id", function(d) { return "row" + d.id; })
       .attr("class", "row")
-      .attr("transform", function(d, i) { return "translate(0," + y(i) + ")"; })
+      .attr("transform", function(d, i) { return "translate(0," + y_scale(i) + ")"; })
       .each(row);
 
   // row.append("text")
@@ -103,10 +103,10 @@ function matrix(json) {
       .enter().append("rect")
         .attr("class", "cell")
         .attr("x", function(d,i) { 
-          return x(i); 
+          return x_scale(i); 
         })
-        .attr("width", x.rangeBand())
-        .attr("height", y.rangeBand())
+        .attr("width", x_scale.rangeBand())
+        .attr("height", y_scale.rangeBand())
         .style("fill", function(d, i) { 
           if ( 0 <= i && i <= 3){
             return d == 1 ? "#4A4CFF" : "#ECEDFF" ;
@@ -143,12 +143,12 @@ function matrix(json) {
   };
 
   function order(col){
-    y.domain(orders[col]);
+    y_scale.domain(orders[col]);
     var t = svg.transition().duration(1500);
 
     t.selectAll(".row")
-      .delay(function(d, i) { return y(d.index) * 4; })
-      .attr("transform", function(d, i) { return "translate(0," + y(d.index) + ")"; });
+      .delay(function(d, i) { return y_scale(d.index) * 4; })
+      .attr("transform", function(d, i) { return "translate(0," + y_scale(d.index) + ")"; });
 
   }
 
