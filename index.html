@@ -11,7 +11,7 @@
 
 </style>
 <!-- <script src="//jdfekete.github.io/reorder.js/lib/d3.v3.js"></script> -->
-<script src="//d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="matrix.js"></script>
 
 <div><div class = "title_accent" style = "margin-right:6px; width:10%">green</div><div class = "title">THE <span id = "emp">(UNGREAT)</span> STATE OF SUBSTITUTE TEACHING TODAY</div><div class = "title_accent" style = "margin-left:6px; width:100%">green</div></div>
@@ -25,8 +25,9 @@
 </div>
  -->
 <div id = "right">
-<div id = "col_div"></div>
-<div id = "matrix"></div>
+  <div id = "sup_col_names"></div>
+  <div id = "col_div"></div>
+  <div id = "matrix"></div>
 </div>
 
 
@@ -38,6 +39,8 @@
 
   var x_scale = d3.scale.ordinal().rangeBands([0, width], .02, 0);
   var y_scale = d3.scale.ordinal().rangeBands([0, height], .3, 0);
+
+  var super_column_labels = d3.select("#sup_col_names").append("g").attr("id", "col_names");
 
   var column_labels = d3.select("#col_div").append("g")
     .attr("id", "cols");

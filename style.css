@@ -74,6 +74,11 @@ svg {
 }
 
 
+#sup_col_names {
+  font: 12px "Roboto-bold";
+  margin-bottom: 5px;
+}
+
 .colLabel{
   text-align: center;
   font-size: 10px;

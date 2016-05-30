@@ -16,6 +16,18 @@ function matrix(json) {
   y_scale.domain(d3.range(n));
   x_scale.domain(d3.range(10));
 
+  var super_columns = ["Educational <br/> requirements", " ", " ", " ", "Maximum consecutive <br/> teaching days", " ", "Recommendation <br/> required", " ", "Background check <br/> requirements", " "];
+  var super_column_labels = d3.select("#col_names")
+    .attr("transform", "translate(0,0)")
+    .selectAll(".colLabel")
+    .data(super_columns)
+      .enter().append("div")
+      .style("display", "inline-block")
+      .html(function(d) { return d; })
+      .style("width", x_scale.rangeBand() + "px")
+      .style("height","10px")
+      .style("margin-right", "1.5px")
+
   var columns = ["High school/ GED", "Bachelor's degree", "Teaching certificate", "State-specific tests", "For one<br/>school", "For one<br/>teacher", 
     "District/ Superintendent", "Past<br/>employer", "School", "Thumbprint required"];
 
@@ -144,7 +156,7 @@ function matrix(json) {
 
   function order(col){
     y_scale.domain(orders[col]);
-    var t = svg.transition().duration(1500);
+    var t = svg.transition().duration(1000);
 
     t.selectAll(".row")
       .delay(function(d, i) { return y_scale(d.index) * 4; })
