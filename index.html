@@ -9,32 +9,16 @@
   fill: #fff;
 }
 
-line {
-  stroke: #fff;
-  stroke-width:2;
-}
-
-text.active {
-  fill: red;
-  font-size: 120%;
-}
-
-rect.highlight {
-    fill: none;
-    stroke: red;
-    stroke-width: 2;
-}
-
 </style>
 <script src="//jdfekete.github.io/reorder.js/lib/d3.v3.js"></script>
-<!-- <script src="//jdfekete.github.io/reorder.js/lib/d3.parcoords.js"></script>
-<script src="//jdfekete.github.io/reorder.js/lib/science.v1.js"></script>
-<script src="//jdfekete.github.io/reorder.js/lib/tiny-queue.js"></script>
-<script src="//jdfekete.github.io/reorder.js/reorder.v1.js"></script> -->
 <script src="matrix.js"></script>
 
-<h1>THE (UNGREAT) STATE OF SUBSTITUTE TEACHING TODAY</h1>
-<g id = "matrix"></g>
+<div class = "title">THE <span id = "emp">(UNGREAT)</span> STATE OF SUBSTITUTE TEACHING TODAY</div>
+
+<div id = "right">
+<div id = "col_div"></div>
+<div id = "matrix"></div>
+</div>
 
 <script>
   var margin = {top: 0, right: 0, bottom: 10, left: 80},
@@ -43,12 +27,12 @@ rect.highlight {
 
   var x = d3.scale.ordinal().rangeBands([0, width], .02, 0);
   var y = d3.scale.ordinal().rangeBands([0, height], .3, 0);
-      // z = d3.scale.linear().domain([0, 4]).clamp(true),
-      // c = d3.scale.category10().domain(d3.range(10));
-  var column_labels = d3.select("#matrix").append("g")
+
+  var column_labels = d3.select("#col_div").append("g")
     .attr("id", "cols");
 
   var svg = d3.select("#matrix").append("svg")
+      .attr("id", "mat_svg")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
       .style("margin-left", -margin.left + "px")

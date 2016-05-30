@@ -19,15 +19,40 @@ html {
 
 body {
   font-family: "Roboto", serif;
-  margin: 1em auto 4em auto;
-  position: relative;
-  width: 960px;
+  /*margin: 1em auto 4em auto;*/
+  margin: 0em 0em 0em 0em;
 }
 
 
 svg {
   font: 10px "Roboto", sans-serif;
 }
+
+#matrix{
+  padding: 1em auto 4em auto;
+}
+
+
+.title{
+  text-align: center;
+  background-color: #10FFD1;
+  width: 100%;
+  margin: 30px 0px 30px 0px; 
+  padding:5px;
+  font: 30px "Roboto-light";
+  color:white;
+}
+
+#emp{
+  color: #4A4CFF;
+  font: 30px "Roboto";
+
+}
+
+#right{
+  margin-left: 100px;
+}
+
 
 .colLabel{
   text-align: center;
