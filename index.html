@@ -154,11 +154,12 @@
 
     var state_rows = d3.select("#mat_svg").selectAll(".row")
       .filter(function(d){ return d["state"] == state; })
-      .selectAll(".cell")
-        .style("stroke", "#555")
-        .style("stroke-width","2");
+      //.selectAll(".cell")
+        //.style("stroke", "#555")
+        //.style("stroke-width","2");
 
     d3.select("#state_name").text(abrv_to_name[state]);
+    //d3.select("#detailed_info").text(abrv_to_name[state]);
     d3.select("#info").style("display", "block");
   }
 
