@@ -21,11 +21,11 @@ var p_svg = d3.select("#parallel").append("svg")
 
 min_max = {}
 
-d3.csv("data/states.csv", function(error, states) {
+d3.csv("data/parallel_dat.csv", function(error, states) {
 
   // Extract the list of dimensions and create a scale for each.
   x.domain(dimensions = d3.keys(states[0]).filter(function(d,i) {
-    if ( d =='State'){
+    if ( i == 0){
       min_max[i] = states.map(function(p) { return p[d]; });
       return true && (y[d] = d3.scale.ordinal()
         .domain(states.map(function(p) { return p[d]; }))
@@ -107,7 +107,7 @@ d3.csv("data/states.csv", function(error, states) {
       .data(dimensions.reverse()) //REVERSING DIMENSIONS HERE
     .enter().append("div")
     .attr("class", "axis_label")
-    .style("width", width/2 + "px") //CHANGE 2 TO BE NUMBER OF AXES
+    .style("width", width/(dimensions.length) + "px") //CHANGE 2 TO BE NUMBER OF AXES
     .html(function(d){ return d;})
 
 

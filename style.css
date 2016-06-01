@@ -58,7 +58,7 @@ svg {
 
 #right{
   display:inline-block;
-  margin-left: -100px;
+  margin-left: 0px;
   /*position: fixed;*/
 }
 
@@ -127,8 +127,8 @@ svg {
 }
 
 .axis_label{
-  font-size: 15px;
-  padding-bottom: 20px;
+  font-size: 10px;
+  padding-bottom: 10px;
   display:inline-block;
   text-align: center;
 }
