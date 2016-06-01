@@ -20,7 +20,7 @@ html {
 body {
   font-family: "Roboto", serif;
   /*margin: 1em auto 4em auto;*/
-  margin: 0em 0em 0em 0em;
+  margin: 0em 0em 4em 0em;
   white-space: nowrap;
 }
 
@@ -58,7 +58,7 @@ svg {
 
 #right{
   display:inline-block;
-  margin-left: 0px;
+  margin-left: 20px;
   /*position: fixed;*/
 }
 
@@ -89,12 +89,15 @@ svg {
 .background path {
   fill: none;
   stroke: #ddd;
-  shape-rendering: crispEdges;
+  /*shape-rendering: crispEdges;*/
+  stroke-width:2;
 }
 
 .foreground path {
   fill: none;
-  stroke: steelblue;
+  stroke: #4A4CFF;
+  stroke-width:2;
+  display: none;
 }
 
 .brush .extent {
@@ -121,9 +124,13 @@ svg {
   stroke: #fff;
 }
 
+#axis0 text{
+  cursor: pointer;
+}
+
 .axis text {
   /*text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;*/
-  cursor: move;
+  /*cursor: move;*/
 }
 
 .axis_label{

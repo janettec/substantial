@@ -1,6 +1,6 @@
 
 var margin = {top: 30, right: 0, bottom: 10, left: 0},
-    width = 900 - margin.left - margin.right,
+    width = 800 - margin.left - margin.right,
     height = 800 - margin.top - margin.bottom;
 
 var x = d3.scale.ordinal().rangePoints([width, 0], 1),
@@ -25,25 +25,31 @@ d3.csv("data/parallel_dat.csv", function(error, states) {
 
   // Extract the list of dimensions and create a scale for each.
   x.domain(dimensions = d3.keys(states[0]).filter(function(d,i) {
-    if ( i == 0){
+    if (i == 0){
       min_max[i] = states.map(function(p) { return p[d]; });
       return true && (y[d] = d3.scale.ordinal()
         .domain(states.map(function(p) { return p[d]; }))
         .range(d3.range(0, height, (height/51))));
     }
     min_max[i] = d3.extent(states, function(p) { return +p[d]; });
+    if (i == 7){
+      return true && (y[d] = d3.scale.linear()
+        .domain(d3.extent(states, function(p) { return +p[d]; }))
+        .range([0, height]));
+    }
     return true && (y[d] = d3.scale.linear()
         .domain(d3.extent(states, function(p) { return +p[d]; }))
         .range([height, 0]));
   }));
 
-  // Add grey background lines for context.
-  // background = p_svg.append("g")
-  //     .attr("class", "background")
-  //   .selectAll("path")
-  //     .data(states)
-  //   .enter().append("path")
-  //     .attr("d", path);
+  //Add grey background lines for context.
+  background = p_svg.append("g")
+      .attr("class", "background")
+    .selectAll("path")
+      .data(states)
+    .enter().append("path")
+      .attr("d", path)
+      .on('click', highlightState);
 
   // Add blue foreground lines for focus.
   foreground = p_svg.append("g")
@@ -92,16 +98,52 @@ d3.csv("data/parallel_dat.csv", function(error, states) {
       .attr("id", function(d, i) { return "axis" + i;})
       .each(function(d, i) { 
         if (i == 0){
-          d3.select(this).call(axis.scale(y[d]).orient("right").tickValues(min_max[i]).tickSize(0)); 
+          d3.select(this).call(axis.scale(y[d]).orient("right").tickValues(min_max[i]).tickSize(0))
+          .selectAll('text')
+            .attr("id", function(d){return d;})
+            .attr("class", "state"); 
         } else {
           d3.select(this).call(axis.scale(y[d]).orient("left").tickValues(min_max[i])); 
         }
-      })
+      });
     // .append("text")
     //   .style("text-anchor", "middle")
     //   .attr("class", "axis_label")
     //   .attr("y", -9)
     //   .text(function(d) { return d; });
+
+  selectedState = null;
+
+  d3.select('#axis0')
+    .selectAll('.state')
+    .on('click', highlightState);
+
+  function highlightState(state){
+    if (typeof state != "string"){
+      state = state['State'];
+      console.log(state);
+    }
+    if (selectedState){
+      selectedState.attr("fill", "#000");
+      selectedState.attr("font-family", "Roboto");
+    }
+    selectedState = d3.select('#' + state);
+    selectedState.attr("fill", "#4A4CFF");
+    selectedState.attr("font-family", "Roboto-bold");
+    foreground.style("display", function(d, i) {
+      return (d["State"] == state) ? "inline": "none";
+    });
+
+    d3.select("#mat_svg").selectAll(".row")
+      .style("opacity", function(d){
+        if (d["state"] == state){
+          return "1.0";
+        } else {
+          return "0.01";
+        }
+
+      });
+  }
 
   d3.select("#axis_label_div").selectAll(".axis_label")
       .data(dimensions.reverse()) //REVERSING DIMENSIONS HERE
@@ -111,7 +153,7 @@ d3.csv("data/parallel_dat.csv", function(error, states) {
     .html(function(d){ return d;})
 
 
-  // Add and store a brush for each axis.
+  //Add and store a brush for each axis.
   // g.append("g")
   //     .attr("class", "brush")
   //     .each(function(d) {
