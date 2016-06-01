@@ -73,7 +73,8 @@ d3.csv("data/parallel_dat.csv", function(error, states) {
           .attr("x", x(dim) + 5)
           .attr("y", y[dim](d[dim]))
           .attr("fill", "#4A4CFF")
-          .style("font-family", "Roboto-bold");
+          .style("font-family", "Roboto-bold")
+          .style("text-shadow","0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff");
 
       }
       labels.attr("display","none");

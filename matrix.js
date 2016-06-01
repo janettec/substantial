@@ -111,6 +111,19 @@ function matrix(json) {
   
 
   function row(row) {
+    var background_cell = d3.select(this).selectAll(".background_cell")
+    .data(getValArray(d3.select(this).data()[0]))
+      .enter().append("rect")
+        .attr("class", "background_cell")
+        .attr("x", function(d,i) { 
+          return x_scale(i); 
+        })
+        .attr("width", x_scale.rangeBand())
+        .attr("height", y_scale.rangeBand())
+        .style("fill", function(d, i) { 
+          return d == 1 ? "#aaa" : "#ddd" ;
+        })
+        .style("display", "none");
     var cell = d3.select(this).selectAll(".cell")
 	  .data(getValArray(d3.select(this).data()[0]))
       .enter().append("rect")

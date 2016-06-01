@@ -141,22 +141,42 @@
 
     d3.select("#p_label" + state).style("display", "inline");
 
-    d3.select("#mat_svg").selectAll(".row")
-      .style("opacity", function(d){
-        if (d["state"] == state){
-          return "1.0";
-        } else {
-          return "0.1";
-        }
-      })
-      .selectAll(".cell")
-      .style("stroke-width","0");
+    var unselected = d3.select("#mat_svg").selectAll(".row")
+      .filter(function(d){
+        return (d["state"] == state) ? false: true;
+      });
 
-    var state_rows = d3.select("#mat_svg").selectAll(".row")
-      .filter(function(d){ return d["state"] == state; })
-      .selectAll(".cell")
-        .style("stroke", "#555")
-        .style("stroke-width","2");
+    var selected = d3.select("#mat_svg").selectAll(".row")
+      .filter(function(d){
+        return (d["state"] == state) ? true: false;
+      });
+
+    selected.selectAll(".cell")
+      .style("display", "inline");
+    selected.selectAll(".background_cell")
+      .style("display", "none");
+
+    unselected.selectAll(".cell")
+      .style("display", "none");
+    unselected.selectAll(".background_cell")
+      .style("display", "inline");
+
+    // d3.select("#mat_svg").selectAll(".row")
+    //   .style("display", function(d){
+    //     if (d["state"] == state){
+    //       return "inline";
+    //     } else {
+    //       return "none";
+    //     }
+    //   });
+      // .selectAll(".cell")
+      // .style("stroke-width","0");
+
+    // var state_rows = d3.select("#mat_svg").selectAll(".row")
+    //   .filter(function(d){ return d["state"] == state; })
+    //   .selectAll(".cell")
+    //     .style("stroke", "#555")
+    //     .style("stroke-width","2");
 
     d3.select("#state_name").text(abrv_to_name[state]);
     d3.select("#info").style("display", "block");
@@ -170,17 +190,19 @@
     }
     foreground.style("display", "none");
     selectedState = null;
-    d3.select("#mat_svg").selectAll(".row")
-      .style("opacity", "1.0")
-      .selectAll(".cell")
-      .style("stroke-width","0");
+    d3.select("#mat_svg").selectAll(".cell")
+      .style("display", "inline");
+    d3.select("#mat_svg").selectAll(".background_cell")
+      .style("display", "none");
+      // .selectAll(".cell")
+      // .style("stroke-width","0");
     d3.select("#state_name").text("");
     d3.select("#info").style("display", "none");
   }
 
   d3.select("#info")
     .on('click', removeHighlight);
-    
+
   d3.json("data/requirements.json", loadJson);
 
 

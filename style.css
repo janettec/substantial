@@ -91,6 +91,7 @@ svg {
   stroke: #ddd;
   /*shape-rendering: crispEdges;*/
   stroke-width:2;
+  cursor: pointer;
 }
 
 .foreground path {
@@ -98,6 +99,7 @@ svg {
   stroke: #4A4CFF;
   stroke-width:2;
   display: none;
+  cursor: pointer;
 }
 
 .brush .extent {
