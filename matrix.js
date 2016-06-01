@@ -168,6 +168,8 @@ function matrix(json) {
   matrix = {}
   matrix.order = order;
 
+  matrix.nodes = nodes;
+
   var timeout = setTimeout(function() {}, 1000);
   matrix.timeout = timeout;
 

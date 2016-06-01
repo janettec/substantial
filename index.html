@@ -31,11 +31,14 @@
 </div>
 
 <div id = "info">
-  <div id = "stats">
+  <div id = "stats" class = "info_sec" style = "padding-right:30px; width:20%">
     <h1 id = "state_name"></h1>
   </div>
-  <div id = "permits"></div>
-  <div id = "notes"></div>
+  <div id = "permits" class = "info_sec" style = "padding-right:30px; width:45%">
+  </div>
+  <div id = "notes" class = "info_sec" style = "width:20%">
+    <h2>Other notes<h2>
+  </div>
 </div>
 
 <script>
@@ -177,7 +180,7 @@
 
   d3.select("#info")
     .on('click', removeHighlight);
-
+    
   d3.json("data/requirements.json", loadJson);
 
 

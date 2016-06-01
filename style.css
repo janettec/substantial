@@ -156,6 +156,10 @@ h1{
   font: 30px "Roboto-light";
 }
 
+h2{
+  font: 20px "Roboto-light";
+}
+
 #info{
   background-color: #515151;
   width:100%;
@@ -165,4 +169,14 @@ h1{
   display:none;
   padding:20px 100px 30px 100px;
   color:white;
+}
+
+.triangle{
+  border-color: #57AF1A #fff #fff #fff;
+  border-style: solid;
+  
+}
+
+.info_sec{
+  display:inline-block;
 }
