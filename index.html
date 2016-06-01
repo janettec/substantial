@@ -30,7 +30,13 @@
   <div id = "matrix"></div>
 </div>
 
-
+<div id = "info">
+  <div id = "stats">
+    <h1 id = "state_name"></h1>
+  </div>
+  <div id = "permits"></div>
+  <div id = "notes"></div>
+</div>
 
 <script>
   var margin = {top: 0, right: 0, bottom: 10, left: 0},
@@ -52,6 +58,45 @@
       .style("margin-left", -margin.left + "px")
     .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  selectedState = null;
+
+  function highlightState(state){
+    if (typeof state != "string"){
+      state = state['state'] ? state['state'] : state['State'];
+      console.log(state);
+    }
+    if (selectedState){
+      selectedState.attr("fill", "#000");
+      selectedState.attr("font-family", "Roboto");
+    }
+    selectedState = d3.select('#' + state);
+    selectedState.attr("fill", "#4A4CFF");
+    selectedState.attr("font-family", "Roboto-bold");
+    foreground.style("display", function(d, i) {
+      return (d["State"] == state) ? "inline": "none";
+    });
+
+    d3.select("#mat_svg").selectAll(".row")
+      .style("opacity", function(d){
+        if (d["state"] == state){
+          return "1.0";
+        } else {
+          return "0.1";
+        }
+      })
+      .selectAll(".cell")
+      .style("stroke-width","0");
+
+    var state_rows = d3.select("#mat_svg").selectAll(".row")
+      .filter(function(d){ return d["state"] == state; })
+      .selectAll(".cell")
+        .style("stroke", "#555")
+        .style("stroke-width","2");
+
+    d3.select("#state_name").text(abrv_to_name[state]);
+    d3.select("#info").style("display", "block");
+  }
 
   d3.json("data/requirements.json", loadJson);
 

@@ -18,6 +18,60 @@ var p_svg = d3.select("#parallel").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+var abrv_to_name = {
+  "AL": "Alabama",
+  "AK": "Alaska",
+  "AZ": "Arizona",
+  "AR": "Arkansas",
+  "CA": "California",
+  "CO": "Colorado",
+  "CT": "Connecticut",
+  "DE": "Delaware",
+  "DC": "District Of Columbia",
+  "FL": "Florida",
+  "GA": "Georgia",
+  "HI": "Hawaii",
+  "ID": "Idaho",
+  "IL": "Illinois",
+  "IN": "Indiana",
+  "IA": "Iowa",
+  "KS": "Kansas",
+  "KY": "Kentucky",
+  "LA": "Louisiana",
+  "ME": "Maine",
+  "MD": "Maryland",
+  "MA": "Massachusetts",
+  "MI": "Michigan",
+  "MN": "Minnesota",
+  "MS": "Mississippi",
+  "MO": "Missouri",
+  "MT": "Montana",
+  "NE": "Nebraska",
+  "NV": "Nevada",
+  "NH": "New Hampshire",
+  "NJ": "New Jersey",
+  "NM": "New Mexico",
+  "NY": "New York",
+  "NC": "North Carolina",
+  "ND": "North Dakota",
+  "OH": "Ohio",
+  "OK": "Oklahoma",
+  "OR": "Oregon",
+  "PA": "Pennsylvania",
+  "RI": "Rhode Island",
+  "SC": "South Carolina",
+  "SD": "South Dakota",
+  "TN": "Tennessee",
+  "TX": "Texas",
+  "UT": "Utah",
+  "VT": "Vermont",
+  "VA": "Virginia",
+  "WA": "Washington",
+  "WV": "West Virginia",
+  "WI": "Wisconsin",
+  "WY": "Wyoming"
+}
+
 
 min_max = {}
 
@@ -112,38 +166,11 @@ d3.csv("data/parallel_dat.csv", function(error, states) {
     //   .attr("y", -9)
     //   .text(function(d) { return d; });
 
-  selectedState = null;
-
   d3.select('#axis0')
     .selectAll('.state')
     .on('click', highlightState);
 
-  function highlightState(state){
-    if (typeof state != "string"){
-      state = state['State'];
-      console.log(state);
-    }
-    if (selectedState){
-      selectedState.attr("fill", "#000");
-      selectedState.attr("font-family", "Roboto");
-    }
-    selectedState = d3.select('#' + state);
-    selectedState.attr("fill", "#4A4CFF");
-    selectedState.attr("font-family", "Roboto-bold");
-    foreground.style("display", function(d, i) {
-      return (d["State"] == state) ? "inline": "none";
-    });
 
-    d3.select("#mat_svg").selectAll(".row")
-      .style("opacity", function(d){
-        if (d["state"] == state){
-          return "1.0";
-        } else {
-          return "0.01";
-        }
-
-      });
-  }
 
   d3.select("#axis_label_div").selectAll(".axis_label")
       .data(dimensions.reverse()) //REVERSING DIMENSIONS HERE

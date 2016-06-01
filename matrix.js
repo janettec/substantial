@@ -50,6 +50,7 @@ function matrix(json) {
       .attr("id", function(d) { return "row" + d.id; })
       .attr("class", "row")
       .attr("transform", function(d, i) { return "translate(0," + y_scale(i) + ")"; })
+      .on('click', highlightState)
       .each(row);
 
   // row.append("text")

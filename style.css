@@ -20,7 +20,7 @@ html {
 body {
   font-family: "Roboto", serif;
   /*margin: 1em auto 4em auto;*/
-  margin: 0em 0em 4em 0em;
+  margin: 0px 0px 250px 0px;
   white-space: nowrap;
 }
 
@@ -150,4 +150,19 @@ svg {
   font: 30px "Roboto-light";
   color:#ACFF21;
   padding:3px;
+}
+
+h1{
+  font: 30px "Roboto-light";
+}
+
+#info{
+  background-color: #515151;
+  width:100%;
+  height:200px;
+  bottom:0;
+  position:fixed;
+  display:none;
+  padding:20px 100px 30px 100px;
+  color:white;
 }
