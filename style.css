@@ -163,7 +163,7 @@ h2{
 #info{
   background-color: #515151;
   width:100%;
-  height:200px;
+  height:20%;
   bottom:0;
   position:fixed;
   display:none;
@@ -174,7 +174,7 @@ h2{
 .triangle{
   border-color: #57AF1A #fff #fff #fff;
   border-style: solid;
-  
+
 }
 
 .info_sec{
