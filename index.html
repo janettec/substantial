@@ -124,6 +124,7 @@
         removeHighlight();
         return;
       }
+      d3.select("#p_label" + selectedState).style("display", "none");
       d3.select('#' + selectedState).attr("fill", "#000");
       d3.select('#' + selectedState).attr("font-family", "Roboto");
     }
@@ -134,6 +135,8 @@
     foreground.style("display", function(d, i) {
       return (d["State"] == state) ? "inline": "none";
     });
+
+    d3.select("#p_label" + state).style("display", "inline");
 
     d3.select("#mat_svg").selectAll(".row")
       .style("opacity", function(d){
@@ -158,6 +161,7 @@
 
   function removeHighlight(){
     if (selectedState){
+      d3.select("#p_label" + selectedState).style("display", "none");
       d3.select('#' + selectedState).attr("fill", "#000");
       d3.select('#' + selectedState).attr("font-family", "Roboto");
     }

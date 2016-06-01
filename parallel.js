@@ -18,60 +18,6 @@ var p_svg = d3.select("#parallel").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-var abrv_to_name = {
-  "AL": "Alabama",
-  "AK": "Alaska",
-  "AZ": "Arizona",
-  "AR": "Arkansas",
-  "CA": "California",
-  "CO": "Colorado",
-  "CT": "Connecticut",
-  "DE": "Delaware",
-  "DC": "District Of Columbia",
-  "FL": "Florida",
-  "GA": "Georgia",
-  "HI": "Hawaii",
-  "ID": "Idaho",
-  "IL": "Illinois",
-  "IN": "Indiana",
-  "IA": "Iowa",
-  "KS": "Kansas",
-  "KY": "Kentucky",
-  "LA": "Louisiana",
-  "ME": "Maine",
-  "MD": "Maryland",
-  "MA": "Massachusetts",
-  "MI": "Michigan",
-  "MN": "Minnesota",
-  "MS": "Mississippi",
-  "MO": "Missouri",
-  "MT": "Montana",
-  "NE": "Nebraska",
-  "NV": "Nevada",
-  "NH": "New Hampshire",
-  "NJ": "New Jersey",
-  "NM": "New Mexico",
-  "NY": "New York",
-  "NC": "North Carolina",
-  "ND": "North Dakota",
-  "OH": "Ohio",
-  "OK": "Oklahoma",
-  "OR": "Oregon",
-  "PA": "Pennsylvania",
-  "RI": "Rhode Island",
-  "SC": "South Carolina",
-  "SD": "South Dakota",
-  "TN": "Tennessee",
-  "TX": "Texas",
-  "UT": "Utah",
-  "VT": "Vermont",
-  "VA": "Virginia",
-  "WA": "Washington",
-  "WV": "West Virginia",
-  "WI": "Wisconsin",
-  "WY": "Wyoming"
-}
-
 
 min_max = {}
 
@@ -112,6 +58,27 @@ d3.csv("data/parallel_dat.csv", function(error, states) {
       .data(states)
     .enter().append("path")
       .attr("d", path);
+    
+
+  d3.select(".foreground")
+    .selectAll("path")
+    .each(function(d,i){
+      var labels = p_svg.append("g").attr("id","p_label" + d["State"]);
+      for (var dim in d){
+        if (dim == "State"){
+          continue;
+        }
+        labels.append("text")
+          .text(d[dim])
+          .attr("x", x(dim) + 5)
+          .attr("y", y[dim](d[dim]))
+          .attr("fill", "#4A4CFF")
+          .style("font-family", "Roboto-bold");
+
+      }
+      labels.attr("display","none");
+    });
+
 
   // Add a group element for each dimension.
   var g = p_svg.selectAll(".dimension")
