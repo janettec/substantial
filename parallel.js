@@ -57,7 +57,8 @@ d3.csv("data/parallel_dat.csv", function(error, states) {
     .selectAll("path")
       .data(states)
     .enter().append("path")
-      .attr("d", path);
+      .attr("d", path)
+      .on('click', highlightState);;
     
 
   d3.select(".foreground")

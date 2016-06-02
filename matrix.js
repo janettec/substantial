@@ -16,6 +16,48 @@ function matrix(json) {
   y_scale.domain(d3.range(n));
   x_scale.domain(d3.range(10));
 
+  // var brush = d3.svg.brush()
+  //     .x(x_scale)
+  //     .y(y_scale)
+  //     .on("brushstart", brushstart)
+  //     .on("brush", brushmove)
+  //     .on("brushend", brushend);
+
+  // function brushstart(p) {
+  //   // console.log("started");
+  //   brush.clear();
+  //   // if (brushCell !== this) {
+  //   //   d3.select(brushCell).call(brush.clear());
+  //   //   x.domain(domainByTrait[p.x]);
+  //   //   y.domain(domainByTrait[p.y]);
+  //   //   brushCell = this;
+  //   // }
+  // }
+
+  // // Highlight the selected circles.
+  // function brushmove(p) {
+  //   console.log("moving");
+  //   // var e = brush.extent();
+  //   // svg.selectAll("circle").classed("hidden", function(d) {
+  //   //   return e[0][0] > d[p.x] || d[p.x] > e[1][0]
+  //   //       || e[0][1] > d[p.y] || d[p.y] > e[1][1];
+  //   // });
+  // }
+
+  // // If the brush is empty, select all circles.
+  // function brushend() {
+  //   var e = brush.extent();
+  //   console.log()
+  //   //if (brush.empty()) svg.selectAll(".hidden").classed("hidden", false);
+  // }
+
+  // var mBrush = d3.select("#mat_svg").select(".background").append("g")
+  //   .attr("class", "brush")
+  //   .call(brush)
+  //   .call(brush.event);
+
+  // d3.select("#mat_svg").call(brush);
+
   var super_columns = ["Educational <br/> requirements", " ", " ", " ", "Maximum consecutive <br/> teaching days", " ", "Recommendation <br/> required", " ", "Background check <br/> requirements", " "];
   var super_column_labels = d3.select("#col_names")
     .attr("transform", "translate(0,0)")
@@ -50,7 +92,7 @@ function matrix(json) {
       .attr("id", function(d) { return "row" + d.id; })
       .attr("class", "row")
       .attr("transform", function(d, i) { return "translate(0," + y_scale(i) + ")"; })
-      .on('click', highlightState)
+      .on('click', highlightRow)
       .each(row);
 
   // row.append("text")
@@ -121,7 +163,7 @@ function matrix(json) {
         .attr("width", x_scale.rangeBand())
         .attr("height", y_scale.rangeBand())
         .style("fill", function(d, i) { 
-          return d == 1 ? "#aaa" : "#ddd" ;
+          return d == 1 ? "#ccc" : "#eee" ;
         })
         .style("display", "none");
     var cell = d3.select(this).selectAll(".cell")
@@ -169,8 +211,9 @@ function matrix(json) {
   };
 
   function order(col){
+    currentOrder = orders[col];
     y_scale.domain(orders[col]);
-    var t = svg.transition().duration(1000);
+    var t = svg.transition().duration(500);
 
     t.selectAll(".row")
       .delay(function(d, i) { return y_scale(d.index) * 4; })

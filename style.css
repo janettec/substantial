@@ -103,9 +103,9 @@ svg {
 }
 
 .brush .extent {
-  fill-opacity: .3;
-  stroke: #fff;
-  shape-rendering: crispEdges;
+  fill-opacity: 0.2;
+  stroke: #000;
+  /*shape-rendering: crispEdges;*/
 }
 
 .axis line {
