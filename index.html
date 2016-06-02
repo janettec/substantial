@@ -154,8 +154,12 @@
       var stateLabel = d3.select('#' + selectedStates[s]);
       stateLabel.attr("fill", "#4A4CFF");
       stateLabel.attr("font-family", "Roboto-bold");
+
+
     
     }
+
+    d3.select(".p_label").style("display", "none");
 
     foreground.style("display", function(d, i) {
       return (selectedStates.indexOf(d["State"]) > -1) ? "inline": "none";
