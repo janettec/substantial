@@ -21,7 +21,7 @@ var p_svg = d3.select("#parallel").append("svg")
 
 min_max = {}
 
-d3.csv("data/parallel_dat.csv", function(error, states) {
+d3.csv("data/parallel_dat3.csv", function(error, states) {
 
   // Extract the list of dimensions and create a scale for each.
   x.domain(dimensions = d3.keys(states[0]).filter(function(d,i) {
@@ -32,7 +32,7 @@ d3.csv("data/parallel_dat.csv", function(error, states) {
         .range(d3.range(0, height, (height/51))));
     }
     min_max[i] = d3.extent(states, function(p) { return +p[d]; });
-    if (i == 7){
+    if (i == 3 || i == 1){
       return true && (y[d] = d3.scale.linear()
         .domain(d3.extent(states, function(p) { return +p[d]; }))
         .range([0, height]));

@@ -228,6 +228,8 @@
 
     d3.select("#state_name").text(abrv_to_name[state]);
     d3.select("#info").style("display", "block");
+
+    //data[Salary]
   
   }
 
@@ -308,9 +310,16 @@
 
     d3.select("#state_name").text(abrv_to_name[state]);
     console.log(state);
-    d3.select("#detailed_info").text(function (d) {
-      return d["state"];
-    }); //How do you access the information for a particular state?????
+    //d3.select("#detailed_info").text(function (d) {
+    //  return d["state"];
+    //}); //How do you access the information for a particular state?????
+
+    var rows = d3.selectAll(".row").filter(function(d){
+      return d["state"] == state;
+    }).data();
+
+    createCells(rows)
+    
     d3.select("#info").style("display", "block");
   }
 
