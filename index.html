@@ -33,6 +33,7 @@
 <div id = "info">
   <div id = "stats" class = "info_sec" style = "padding-right:30px; width:20%">
     <h1 id = "state_name"></h1>
+    <div id = "detailed_info"></div>
   </div>
   <div id = "permits" class = "info_sec" style = "padding-right:30px; width:45%">
   </div>
@@ -175,7 +176,6 @@
       .style("display", "inline");
 
     d3.select("#state_name").text(abrv_to_name[state]);
-    //d3.select("#detailed_info").text(abrv_to_name[state]);
     d3.select("#info").style("display", "block");
   
   }
@@ -248,7 +248,10 @@
     //     .style("stroke-width","2");
 
     d3.select("#state_name").text(abrv_to_name[state]);
-    //d3.select("#detailed_info").text(abrv_to_name[state]);
+    console.log(state);
+    d3.select("#detailed_info").text(function (d) {
+      return d["state"];
+    }); //How do you access the information for a particular state?????
     d3.select("#info").style("display", "block");
   }
 
