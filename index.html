@@ -151,12 +151,10 @@
       .style("display", "inline");
 
     for (var s = 0; s < selectedStates.length; s++){
-      var stateLabel = d3.select('#' + selectedStates[s]);
-      stateLabel.attr("fill", "#4A4CFF");
-      stateLabel.attr("font-family", "Roboto-bold");
-
-
-    
+      d3.select('#' + selectedStates[s])
+        .attr("fill", "#4A4CFF")
+        .attr("font-family", "Roboto-bold")
+        .attr("font-size", "13px");
     }
 
     d3.select(".p_label").style("display", "none");
@@ -189,8 +187,10 @@
     if (selectedStates.length > 0) {
       for (var s = 0; s < selectedStates.length; s++){
         d3.select("#p_label" + selectedStates[s]).style("display", "none");
-        d3.select('#' + selectedStates[s]).attr("fill", "#000");
-        d3.select('#' + selectedStates[s]).attr("font-family", "Roboto");
+        d3.select('#' + selectedStates[s])
+          .attr("fill", "#000")
+          .attr("font-family", "Roboto")
+          .attr("font-size", "10px");
       }
     }
     selectedStates = [];
@@ -198,9 +198,10 @@
     selectedRows = [];
     selectedRows.push(data.index);
 
-    var stateLabel = d3.select('#' + state);
-    stateLabel.attr("fill", "#4A4CFF");
-    stateLabel.attr("font-family", "Roboto-bold");
+    d3.select('#' + state)
+      .attr("fill", "#4A4CFF")
+      .attr("font-family", "Roboto-bold")
+      .attr("font-size", "13px");
     foreground.style("display", function(d, i) {
       return (d["State"] == state) ? "inline": "none";
     });
@@ -245,17 +246,20 @@
 
       for (var s = 0; s < selectedStates.length; s++){
         d3.select("#p_label" + selectedStates[s]).style("display", "none");
-        d3.select('#' + selectedStates[s]).attr("fill", "#000");
-        d3.select('#' + selectedStates[s]).attr("font-family", "Roboto");
+        d3.select('#' + selectedStates[s])
+          .attr("fill", "#000")
+          .attr("font-family", "Roboto")
+          .attr("font-size", "10px");
       }
     }
     selectedStates = [];
     selectedStates.push(state);
     selectedRows = [];
 
-    var stateLabel = d3.select('#' + state);
-    stateLabel.attr("fill", "#4A4CFF");
-    stateLabel.attr("font-family", "Roboto-bold");
+    d3.select('#' + state)
+      .attr("fill", "#4A4CFF")
+      .attr("font-family", "Roboto-bold")
+      .attr("font-size", "13px");
     foreground.style("display", function(d, i) {
       return (d["State"] == state) ? "inline": "none";
     });
@@ -311,8 +315,10 @@
     if (selectedStates.length > 0){
       for (var s = 0; s < selectedStates.length; s++){
         d3.select("#p_label" + selectedStates[s]).style("display", "none");
-        d3.select('#' + selectedStates[s]).attr("fill", "#000");
-        d3.select('#' + selectedStates[s]).attr("font-family", "Roboto");
+        d3.select('#' + selectedStates[s])
+          .attr("fill", "#000")
+          .attr("font-family", "Roboto")
+          .attr("font-size", "10px");
       }
     }
     foreground.style("display", "none");
