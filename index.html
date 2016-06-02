@@ -116,35 +116,83 @@
     .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  selectedState = null; 
+  selectedStates = []; 
   selectedRows = [];
 
-  // function highlightRows(start, end){
+  function highlightRows(start, end){
+    d3.select("#state_name").text("");
+    d3.select("#info").style("display", "none");
 
-  // }
+    selectedRows = [];
+    selectedStates = [];
+    var unselected = d3.select("#mat_svg").selectAll(".row")
+      .filter(function(d){
+        return (currentOrder.indexOf(d.index) > end || currentOrder.indexOf(d.index) < start);
+      });
+
+    var selected = d3.select("#mat_svg").selectAll(".row")
+      .filter(function(d){
+        if (currentOrder.indexOf(d.index) <= end && currentOrder.indexOf(d.index) >= start){
+          selectedRows.push(d.index);
+          selectedStates.push(d.state);
+          return true;
+        }
+        return false;
+      });
+
+    selected.selectAll(".cell")
+      .style("display", "inline");
+    selected.selectAll(".background_cell")
+      .style("display", "none");
+
+    unselected.selectAll(".cell")
+      .style("display", "none");
+    unselected.selectAll(".background_cell")
+      .style("display", "inline");
+
+    for (var s = 0; s < selectedStates.length; s++){
+      var stateLabel = d3.select('#' + selectedStates[s]);
+      stateLabel.attr("fill", "#4A4CFF");
+      stateLabel.attr("font-family", "Roboto-bold");
+    
+    }
+
+    foreground.style("display", function(d, i) {
+      return (selectedStates.indexOf(d["State"]) > -1) ? "inline": "none";
+    });
+  }
 
   //For clicking on matrix
   function highlightRow(data){
-    // if (d3.event.shiftKey) { //select multiple rows
-    //   if (selectedRows.length == 1 && selectedRows[0] != data.index){
-    //     if (currentOrder.indexOf(selectedRows[0]) < data.index){
-    //       highlightRows()
-    //     }
-    //   }
-    // }
+    if (d3.event.shiftKey) { //select multiple rows
+      if (selectedRows.length == 1 && selectedRows[0] != data.index){
+        if (currentOrder.indexOf(selectedRows[0]) < currentOrder.indexOf(data.index)){
+          highlightRows(currentOrder.indexOf(selectedRows[0]), currentOrder.indexOf(data.index));
+        } else {
+          highlightRows(currentOrder.indexOf(data.index), currentOrder.indexOf(selectedRows[0]));
+        }
+      }
+      return;
+    }
     state = data.state;
     if (selectedRows.length > 0){
       if (selectedRows.indexOf(data.index) > -1){
         removeHighlight();
         return;
       }
-      d3.select("#p_label" + selectedState).style("display", "none");
-      d3.select('#' + selectedState).attr("fill", "#000");
-      d3.select('#' + selectedState).attr("font-family", "Roboto");
     }
-    selectedState = state;
+    if (selectedStates.length > 0) {
+      for (var s = 0; s < selectedStates.length; s++){
+        d3.select("#p_label" + selectedStates[s]).style("display", "none");
+        d3.select('#' + selectedStates[s]).attr("fill", "#000");
+        d3.select('#' + selectedStates[s]).attr("font-family", "Roboto");
+      }
+    }
+    selectedStates = [];
+    selectedStates.push(state);
     selectedRows = [];
     selectedRows.push(data.index);
+
     var stateLabel = d3.select('#' + state);
     stateLabel.attr("fill", "#4A4CFF");
     stateLabel.attr("font-family", "Roboto-bold");
@@ -159,10 +207,7 @@
         return (d.index == data.index) ? false: true;
       });
 
-    var selected = d3.select("#mat_svg").selectAll("#row" + (data.index + 1));
-      // .filter(function(d){
-      //   return (d.index == data.index) ? true: false;
-      // });
+    var selected = d3.select("#mat_svg").selectAll("#row" + (data.index + 1)); //id's are numbered starting at 1
 
     selected.selectAll(".cell")
       .style("display", "inline");
@@ -187,17 +232,22 @@
     if (typeof state != "string"){
       state = state['State'];
     }
-    if (selectedRows.length > 0){
-      if (selectedState == state){
+    if (selectedRows.length > 0 && selectedStates.length > 0){
+      if (selectedStates.indexOf(state) > -1){
         removeHighlight();
         return;
       }
-      d3.select("#p_label" + selectedState).style("display", "none");
-      d3.select('#' + selectedState).attr("fill", "#000");
-      d3.select('#' + selectedState).attr("font-family", "Roboto");
+
+      for (var s = 0; s < selectedStates.length; s++){
+        d3.select("#p_label" + selectedStates[s]).style("display", "none");
+        d3.select('#' + selectedStates[s]).attr("fill", "#000");
+        d3.select('#' + selectedStates[s]).attr("font-family", "Roboto");
+      }
     }
-    selectedState = state;
+    selectedStates = [];
+    selectedStates.push(state);
     selectedRows = [];
+
     var stateLabel = d3.select('#' + state);
     stateLabel.attr("fill", "#4A4CFF");
     stateLabel.attr("font-family", "Roboto-bold");
@@ -253,13 +303,15 @@
   }
 
   function removeHighlight(){
-    if (selectedState){
-      d3.select("#p_label" + selectedState).style("display", "none");
-      d3.select('#' + selectedState).attr("fill", "#000");
-      d3.select('#' + selectedState).attr("font-family", "Roboto");
+    if (selectedStates.length > 0){
+      for (var s = 0; s < selectedStates.length; s++){
+        d3.select("#p_label" + selectedStates[s]).style("display", "none");
+        d3.select('#' + selectedStates[s]).attr("fill", "#000");
+        d3.select('#' + selectedStates[s]).attr("font-family", "Roboto");
+      }
     }
     foreground.style("display", "none");
-    selectedState = null;
+    selectedStates = [];
     selectedRows = [];
     d3.select("#mat_svg").selectAll(".cell")
       .style("display", "inline");
@@ -274,7 +326,7 @@
   d3.select("#info")
     .on('click', removeHighlight);
 
-  currentOrder = null;
+  currentOrder = d3.range(109); //hard coded number of rows
 
   d3.json("data/requirements.json", loadJson);
 
