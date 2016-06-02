@@ -64,7 +64,9 @@ d3.csv("data/parallel_dat.csv", function(error, states) {
   d3.select(".foreground")
     .selectAll("path")
     .each(function(d,i){
-      var labels = p_svg.append("g").attr("id","p_label" + d["State"]);
+      var labels = p_svg.append("g")
+        .attr("class", "p_label")
+        .attr("id","p_label" + d["State"]);
       for (var dim in d){
         if (dim == "State"){
           continue;
