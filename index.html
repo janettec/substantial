@@ -418,7 +418,7 @@
       var permit_svg = d3.select("#permits").append("svg") //doesn't want to load and IDK why
           .attr("id", "permit_svg")
           .attr("width", 600)
-          .attr("height", 130)
+          .attr("height", 100)
           .style("padding-left", "300px");
 
       var height = (rows.length * 40 <= 130) ? rows.length * 40 : 130;
@@ -442,7 +442,13 @@
         .style("font-size", "10px")
         .text(function(d, i) { return d.type_of_auth; })
         .call(wrap, 200); //wrap long labels
-    }  
+      }  
+
+      var detailed_info = d3.select("#detailed_info");
+
+      console.log(detailed_info.select("#" + state));
+
+
   }
 
 
@@ -470,56 +476,8 @@
 
   }
 
-  /*
-
-
-  var row = permit_svg.selectAll(".row")
-      .data(nodes)
-    .enter().append("g")
-      .attr("id", function(d) { return "row" + d.id; })
-      .attr("class", "row")
-      .attr("transform", function(d, i) { return "translate(0," + y_scale(i) + ")"; })
-      .on('click', highlightRow)
-      .each(row);
-
-  function row(row) {
-    var background_cell = d3.select(this).selectAll(".background_cell")
-    .data(getValArray(d3.select(this).data()[0]))
-      .enter().append("rect")
-        .attr("class", "background_cell")
-        .attr("x", function(d,i) { 
-          return x_scale(i); 
-        })
-        .attr("width", x_scale.rangeBand())
-        .attr("height", y_scale.rangeBand())
-        .style("fill", function(d, i) { 
-          return d == 1 ? "#ccc" : "#eee" ;
-        })
-        .style("display", "none");
-    var cell = d3.select(this).selectAll(".cell")
-    .data(getValArray(d3.select(this).data()[0]))
-      .enter().append("rect")
-        .attr("class", "cell")
-        .attr("x", function(d,i) { 
-          return x_scale(i); 
-        })
-        .attr("width", x_scale.rangeBand())
-        .attr("height", y_scale.rangeBand())
-        .style("fill", function(d, i) { 
-          if ( 0 <= i && i <= 3){
-            return d == 1 ? "#4A4CFF" : "#ECEDFF" ;
-          } else if (4 <= i && i <= 5){
-            return d == 1 ? "#10FFD1" : "#E7FFFA";
-          } else if (6 <= i && i <=7){
-            return d == 1 ? "#ACFF21" : "#F6FFE8";
-          } else {
-            return d == 1 ? "#F2FF21" : "#FDFFE8";
-          }
-        });
-  }*/
 
   function createPermitRow(row, i) {
-    //console.log(row.type_of_auth);
     d3.select("#permits").text(row.type_of_auth);
   }
 
