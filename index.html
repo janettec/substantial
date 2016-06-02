@@ -31,14 +31,12 @@
 </div>
 
 <div id = "info">
-  <div id = "stats" class = "info_sec" style = "padding-right:30px; width:20%">
-    <h1 id = "state_name"></h1>
+  <div id = "stats" class = "info_sec" style = "padding-right:30px; width:20%; float: left">
+    <h1 id = "state_name"></h1>  
     <div id = "detailed_info"></div>
   </div>
-  <div id = "permits" class = "info_sec" style = "padding-right:30px; width:45%">
-  </div>
-  <div id = "notes" class = "info_sec" style = "width:20%">
-    <h2>Other notes<h2>
+  <div id = "permits" class = "info_sec" style = "padding-top:30px; padding-right:30px; width:45%; float: left">
+    <div id = "permit_bars"></div>
   </div>
 </div>
 
@@ -99,7 +97,9 @@
 
   var margin = {top: 0, right: 0, bottom: 10, left: 0},
       width = 720,
-      height = 770;
+      height = 770,
+      permit_width = 500,
+      permit_height = 30;
 
   var x_scale = d3.scale.ordinal().rangeBands([0, width], .02, 0);
   var y_scale = d3.scale.ordinal().rangeBands([0, height], .3, 0);
@@ -309,18 +309,187 @@
     //     .style("stroke-width","2");
 
     d3.select("#state_name").text(abrv_to_name[state]);
-    console.log(state);
-    //d3.select("#detailed_info").text(function (d) {
-    //  return d["state"];
-    //}); //How do you access the information for a particular state?????
-
     var rows = d3.selectAll(".row").filter(function(d){
       return d["state"] == state;
     }).data();
 
-    createCells(rows)
+    createPermitRows(rows, state);
     
     d3.select("#info").style("display", "block");
+  }
+
+    function getValArray(obj){
+    valArr = [];
+    valArr.push(obj.hs_ged == 1 ? 1 : 0);
+    valArr.push(obj.bach == 1 ? 1 : 0);
+    valArr.push(obj.teacher_cert == 1 ? 1 : 0);
+    valArr.push(obj.add_test_req == 1 ? 1 : 0);
+    if (obj.consec_day_rec == 1){
+      if (obj.teacher_overall == 0){
+        valArr.push(0); //overall limit
+        valArr.push(1); //per assignment limit
+      } else if (obj.teacher_overall == 1){
+        valArr.push(1);
+        valArr.push(0);
+      } else {
+        valArr.push(0);
+        valArr.push(0);
+      }
+    } else {
+      valArr.push(0);
+      valArr.push(0);
+    }
+    if (obj.recs_req == 1){
+      if (obj.rec_src == 0){
+        valArr.push(1); //district or superintendent
+        valArr.push(0); //past employer
+        valArr.push(0); //school
+      } else if (obj.rec_src == 1){
+        valArr.push(0);
+        valArr.push(1);
+        valArr.push(0);
+      } else if (obj.rec_src == 2){
+        valArr.push(0);
+        valArr.push(0);
+        valArr.push(1);
+      } else {
+        valArr.push(0);
+        valArr.push(0);
+        valArr.push(0);
+      }
+    }
+    else {
+      valArr.push(0); //district or superintendent 
+      valArr.push(0); //past employer
+      valArr.push(0); //school
+    }
+    valArr.push(obj.thumbprint);
+    return valArr;
+  }
+
+  function createPermitRows(rows, state) {
+    if(rows[0].type_of_auth == "N/A") {
+      d3.select("#permits").text("No state-level standards (only school district-level standards)");
+    } else {
+      var permit_svg = d3.select("#permits").append("svg") //doesn't want to load and IDK why
+          .attr("id", "permit_svg")
+          .attr("width", permit_width + margin.left + margin.right)
+          .style("margin-left", -margin.left + "px")
+          .append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+        permit_svg.append("rect")
+          .attr("width", permit_width)
+          .attr("height", permit_height)
+          .style("fill", "#ffffff");
+
+        
+
+      for(var i = 0; i < rows.length; i++) {
+        permit_svg.selectAll(".row")
+          .data(nodes)
+          .enter().append("g")
+          .attr("id", function(d) { return "row" + d.id; })
+          .attr("class", "row")
+          .attr("transform", function(d, i) { return "translate(0," + y_scale(i) + ")"; })
+          .each(permit_row(rows[i]));
+        //createPermitRow(rows[i], i);
+      }
+    }  
+  }
+
+
+  function permit_row(row) {
+    console.log(getValArray(row));
+     var background_cell = d3.select("#permits") //Need to figure out how to let this display the rectangles T.T
+      .data(getValArray(row))
+      .enter().append("rect")
+        .attr("class", "background_cell")
+        .attr("x", function(d,i) { 
+          return x_scale(i); 
+        })
+        .attr("width", x_scale.rangeBand())
+        .attr("height", y_scale.rangeBand())
+        .style("fill", function(d, i) { 
+          return d == 1 ? "#ccc" : "#eee" ;
+        })
+        .style("display", "none");
+
+    var cell = d3.select("#permits")
+    .data(getValArray(row))
+      .enter().append("rect")
+        .attr("class", "cell")
+        .attr("x", function(d,i) { 
+          return x_scale(i); 
+        })
+        .attr("width", x_scale.rangeBand())
+        .attr("height", y_scale.rangeBand())
+        .style("fill", function(d, i) { 
+          if ( 0 <= i && i <= 3){
+            return d == 1 ? "#4A4CFF" : "#ECEDFF" ;
+          } else if (4 <= i && i <= 5){
+            return d == 1 ? "#10FFD1" : "#E7FFFA";
+          } else if (6 <= i && i <=7){
+            return d == 1 ? "#ACFF21" : "#F6FFE8";
+          } else {
+            return d == 1 ? "#F2FF21" : "#FDFFE8";
+          }
+        });
+
+  }
+
+  /*
+
+
+  var row = permit_svg.selectAll(".row")
+      .data(nodes)
+    .enter().append("g")
+      .attr("id", function(d) { return "row" + d.id; })
+      .attr("class", "row")
+      .attr("transform", function(d, i) { return "translate(0," + y_scale(i) + ")"; })
+      .on('click', highlightRow)
+      .each(row);
+
+  function row(row) {
+    var background_cell = d3.select(this).selectAll(".background_cell")
+    .data(getValArray(d3.select(this).data()[0]))
+      .enter().append("rect")
+        .attr("class", "background_cell")
+        .attr("x", function(d,i) { 
+          return x_scale(i); 
+        })
+        .attr("width", x_scale.rangeBand())
+        .attr("height", y_scale.rangeBand())
+        .style("fill", function(d, i) { 
+          return d == 1 ? "#ccc" : "#eee" ;
+        })
+        .style("display", "none");
+    var cell = d3.select(this).selectAll(".cell")
+    .data(getValArray(d3.select(this).data()[0]))
+      .enter().append("rect")
+        .attr("class", "cell")
+        .attr("x", function(d,i) { 
+          return x_scale(i); 
+        })
+        .attr("width", x_scale.rangeBand())
+        .attr("height", y_scale.rangeBand())
+        .style("fill", function(d, i) { 
+          if ( 0 <= i && i <= 3){
+            return d == 1 ? "#4A4CFF" : "#ECEDFF" ;
+          } else if (4 <= i && i <= 5){
+            return d == 1 ? "#10FFD1" : "#E7FFFA";
+          } else if (6 <= i && i <=7){
+            return d == 1 ? "#ACFF21" : "#F6FFE8";
+          } else {
+            return d == 1 ? "#F2FF21" : "#FDFFE8";
+          }
+        });
+  }*/
+
+  function createPermitRow(row, i) {
+    //console.log(row.type_of_auth);
+    d3.select("#permits").text(row.type_of_auth);
   }
 
   function removeHighlight(){
