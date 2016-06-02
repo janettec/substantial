@@ -157,7 +157,7 @@
         .attr("font-size", "13px");
     }
 
-    d3.select(".p_label").style("display", "none");
+    d3.selectAll(".p_label").style("display", "none");
 
     foreground.style("display", function(d, i) {
       return (selectedStates.indexOf(d["State"]) > -1) ? "inline": "none";
