@@ -227,6 +227,14 @@
       .style("display", "inline");
 
     d3.select("#state_name").text(abrv_to_name[state]);
+
+    var rows = d3.selectAll(".row")
+      .filter(function(d){
+      return d["state"] == state;
+    }).data();
+
+    createPermitRows(rows, state);
+
     d3.select("#info").style("display", "block");
 
     //data[Salary]
