@@ -36,7 +36,7 @@
     <div id = "detailed_info"></div>
   </div>
   <div id = "permits" class = "info_sec" style = "padding-top:30px; padding-right:30px; width:45%; float: left">
-    <div id = "permit_bars"></div>
+    
   </div>
 </div>
 
@@ -309,7 +309,9 @@
     //     .style("stroke-width","2");
 
     d3.select("#state_name").text(abrv_to_name[state]);
-    var rows = d3.selectAll(".row").filter(function(d){
+
+    var rows = d3.selectAll(".row")
+      .filter(function(d){
       return d["state"] == state;
     }).data();
 
@@ -367,64 +369,83 @@
     return valArr;
   }
 
+  //Wrapping code from Mike Bostock
+  //https://bl.ocks.org/mbostock/7555321
+  function wrap(text, width) {
+    text.each(function() {
+      var text = d3.select(this),
+          words = text.text().split(/\s+/).reverse(),
+          word,
+          line = [],
+          lineNumber = 0,
+          lineHeight = 1.1, // ems
+          y = text.attr("y"),
+          dy = parseFloat(text.attr("dy")),
+          tspan = text.text(null).append("tspan").attr("x", -15).attr("y", y).attr("dy", dy + "em");
+      while (word = words.pop()) {
+        line.push(word);
+        tspan.text(line.join(" "));
+        if (tspan.node().getComputedTextLength() > width) {
+          line.pop();
+          tspan.text(line.join(" "));
+          line = [word];
+          tspan = text.append("tspan").attr("x", -15).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+        }
+      }
+    });
+  }
+  
+  var info_x_scale = d3.scale.ordinal().rangeBands([0, 600], .02, 0);
+  var info_y_scale = d3.scale.ordinal();
+
+  info_x_scale.domain(d3.range(10));
+
+
   function createPermitRows(rows, state) {
+    d3.select("#permits").text("");
+    d3.select("#permit_svg").remove(); //remove rows from last state
     if(rows[0].type_of_auth == "N/A") {
       d3.select("#permits").text("No state-level standards (only school district-level standards)");
     } else {
       var permit_svg = d3.select("#permits").append("svg") //doesn't want to load and IDK why
           .attr("id", "permit_svg")
-          .attr("width", permit_width + margin.left + margin.right)
-          .style("margin-left", -margin.left + "px")
-          .append("g")
-          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+          .attr("width", 600)
+          .attr("height", 300)
+          .style("padding-left", "150px");
 
+      info_y_scale.rangeBands([0, rows.length * 50], .3, 0);
+      info_y_scale.domain(d3.range(rows.length));
 
-        permit_svg.append("rect")
-          .attr("width", permit_width)
-          .attr("height", permit_height)
-          .style("fill", "#ffffff");
+      var permit_rows = permit_svg.selectAll(".info_row")
+        .data(rows)
+        .enter().append("g")
+          .attr("class", "info_row")
+          .attr("id", function(d) { return "info_row" + d.id; })
+          .attr("transform", function(d, i) { return "translate(0," + info_y_scale(i) + ")"; })
+          .each(permit_row);
 
-        
-
-      for(var i = 0; i < rows.length; i++) {
-        permit_svg.selectAll(".row")
-          .data(nodes)
-          .enter().append("g")
-          .attr("id", function(d) { return "row" + d.id; })
-          .attr("class", "row")
-          .attr("transform", function(d, i) { return "translate(0," + y_scale(i) + ")"; })
-          .each(permit_row(rows[i]));
-        //createPermitRow(rows[i], i);
-      }
+      permit_rows.append("text")
+        .attr("x", -15)
+        .attr("y", 10)
+        .attr("dy", ".32em")
+        .attr("fill", "#fff")
+        .attr("text-anchor", "end")
+        .text(function(d, i) { return d.type_of_auth; })
+        .call(wrap, 100); //wrap long labels
     }  
   }
 
 
   function permit_row(row) {
-    console.log(getValArray(row));
-     var background_cell = d3.select("#permits") //Need to figure out how to let this display the rectangles T.T
-      .data(getValArray(row))
-      .enter().append("rect")
-        .attr("class", "background_cell")
-        .attr("x", function(d,i) { 
-          return x_scale(i); 
-        })
-        .attr("width", x_scale.rangeBand())
-        .attr("height", y_scale.rangeBand())
-        .style("fill", function(d, i) { 
-          return d == 1 ? "#ccc" : "#eee" ;
-        })
-        .style("display", "none");
-
-    var cell = d3.select("#permits")
+    var permit_cell = d3.select(this).selectAll(".permit_cell")
     .data(getValArray(row))
       .enter().append("rect")
-        .attr("class", "cell")
+        .attr("class", "permit_cell")
         .attr("x", function(d,i) { 
-          return x_scale(i); 
+          return info_x_scale(i); 
         })
-        .attr("width", x_scale.rangeBand())
-        .attr("height", y_scale.rangeBand())
+        .attr("width", info_x_scale.rangeBand())
+        .attr("height", info_y_scale.rangeBand())
         .style("fill", function(d, i) { 
           if ( 0 <= i && i <= 3){
             return d == 1 ? "#4A4CFF" : "#ECEDFF" ;
