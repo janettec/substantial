@@ -418,10 +418,11 @@
       var permit_svg = d3.select("#permits").append("svg") //doesn't want to load and IDK why
           .attr("id", "permit_svg")
           .attr("width", 600)
-          .attr("height", 300)
-          .style("padding-left", "150px");
+          .attr("height", 130)
+          .style("padding-left", "300px");
 
-      info_y_scale.rangeBands([0, rows.length * 50], .3, 0);
+      var height = (rows.length * 40 <= 130) ? rows.length * 40 : 130;
+      info_y_scale.rangeBands([0, height], .3, 0);
       info_y_scale.domain(d3.range(rows.length));
 
       var permit_rows = permit_svg.selectAll(".info_row")
@@ -438,8 +439,9 @@
         .attr("dy", ".32em")
         .attr("fill", "#fff")
         .attr("text-anchor", "end")
+        .style("font-size", "10px")
         .text(function(d, i) { return d.type_of_auth; })
-        .call(wrap, 100); //wrap long labels
+        .call(wrap, 200); //wrap long labels
     }  
   }
 
