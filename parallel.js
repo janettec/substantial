@@ -32,7 +32,7 @@ d3.csv("data/parallel_dat3.csv", function(error, states) {
         .range(d3.range(0, height, (height/51))));
     }
     min_max[i] = d3.extent(states, function(p) { return +p[d]; });
-    if (i == 3 || i == 1){
+    if (i == 3){
       return true && (y[d] = d3.scale.linear()
         .domain(d3.extent(states, function(p) { return +p[d]; }))
         .range([0, height]));
