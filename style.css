@@ -156,6 +156,7 @@ svg {
 
 h1{
   font: 30px "Roboto-light";
+  margin-top: 5px;
 }
 
 h2{
@@ -165,7 +166,7 @@ h2{
 #info{
   background-color: #515151;
   width:100%;
-  height:20%;
+  height:200px;
   bottom:0;
   position:fixed;
   display:none;
@@ -179,6 +180,24 @@ h2{
 
 }
 
+.info_row{
+  cursor:pointer;
+}
+
 .info_sec{
   display:inline-block;
+}
+
+#detailed_info{
+  position: absolute;
+  height:200px;
+  margin-bottom:50px;
+  margin-left: 50px;
+  width:400px;
+  top: 20px;
+}
+
+#detailed_info_list{
+  white-space: normal;
+/*  word-wrap:break-word;*/
 }

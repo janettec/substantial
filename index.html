@@ -10,7 +10,6 @@
 }
 
 </style>
-<!-- <script src="//jdfekete.github.io/reorder.js/lib/d3.v3.js"></script> -->
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="matrix.js"></script>
 
@@ -33,13 +32,12 @@
 </div>
 
 <div id = "info">
-  <div id = "stats" class = "info_sec" style = "padding-right:30px; width:20%; float: left">
     <h1 id = "state_name"></h1>  
-    <div id = "detailed_info"></div>
-  </div>
-  <div id = "permits" class = "info_sec" style = "padding-top:30px; padding-right:30px; width:45%; float: left">
     
-  </div>
+  <div id = "permits" class = "info_sec"></div>
+  <div id = "detailed_info" class = "info_sec">
+    <h2>Other notes</h2> 
+  </div> 
 </div>
 <script src="state_vals.js"></script>
 
@@ -186,8 +184,6 @@
     createPermitRows(rows, state);
 
     d3.select("#info").style("display", "block");
-
-    //data[Salary]
   
   }
 
@@ -249,23 +245,6 @@
     unselected.selectAll(".background_cell")
       .style("display", "inline");
 
-    // d3.select("#mat_svg").selectAll(".row")
-    //   .style("display", function(d){
-    //     if (d["state"] == state){
-    //       return "inline";
-    //     } else {
-    //       return "none";
-    //     }
-    //   });
-      // .selectAll(".cell")
-      // .style("stroke-width","0");
-
-    // var state_rows = d3.select("#mat_svg").selectAll(".row")
-    //   .filter(function(d){ return d["state"] == state; })
-    //   .selectAll(".cell")
-    //     .style("stroke", "#555")
-    //     .style("stroke-width","2");
-
     d3.select("#state_name").text(abrv_to_name[state]);
 
     var rows = d3.selectAll(".row")
@@ -326,32 +305,6 @@
     valArr.push(obj.thumbprint);
     return valArr;
   }
-
-  //Wrapping code from Mike Bostock
-  //https://bl.ocks.org/mbostock/7555321
-  function wrap(text, width) {
-    text.each(function() {
-      var text = d3.select(this),
-          words = text.text().split(/\s+/).reverse(),
-          word,
-          line = [],
-          lineNumber = 0,
-          lineHeight = 1.1, // ems
-          y = text.attr("y"),
-          dy = parseFloat(text.attr("dy")),
-          tspan = text.text(null).append("tspan").attr("x", -15).attr("y", y).attr("dy", dy + "em");
-      while (word = words.pop()) {
-        line.push(word);
-        tspan.text(line.join(" "));
-        if (tspan.node().getComputedTextLength() > width) {
-          line.pop();
-          tspan.text(line.join(" "));
-          line = [word];
-          tspan = text.append("tspan").attr("x", -15).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
-        }
-      }
-    });
-  }
   
   var info_x_scale = d3.scale.ordinal().rangeBands([0, 600], .02, 0);
   var info_y_scale = d3.scale.ordinal();
@@ -360,6 +313,7 @@
 
 
   function createPermitRows(rows, state) {
+    d3.select("#detailed_info_list").remove();
     d3.select("#permits").text("");
     d3.select("#permit_svg").remove(); //remove rows from last state
     if(rows[0].type_of_auth == "N/A") {
@@ -368,8 +322,7 @@
       var permit_svg = d3.select("#permits").append("svg") //doesn't want to load and IDK why
           .attr("id", "permit_svg")
           .attr("width", 600)
-          .attr("height", 100)
-          .style("padding-left", "300px");
+          .attr("height", 150);
 
       var height = (rows.length * 40 <= 130) ? rows.length * 40 : 130;
       info_y_scale.rangeBands([0, height], .3, 0);
@@ -384,20 +337,69 @@
           .each(permit_row);
 
       permit_rows.append("text")
-        .attr("x", -15)
+        .attr("x", 6)
         .attr("y", 10)
-        .attr("dy", ".32em")
         .attr("fill", "#fff")
-        .attr("text-anchor", "end")
-        .style("font-size", "10px")
-        .text(function(d, i) { return d.type_of_auth; })
-        .call(wrap, 200); //wrap long labels
+        .style("font-size", "12px")
+        .style("font-family", "Roboto-light")
+        .text(function(d, i) { return d.type_of_auth; });
+
+
+      permit_rows.append("line")
+        .attr("x1", 1)
+        .attr("y1", 0)
+        .attr("x2", 1)
+        .attr("y2", info_y_scale.rangeBand()+2)
+        .style("stroke", "#fff")
+        .style("stroke-width",1)
+        .attr("class", "permit_line")
+        .attr("id", function(d){return "permit_line" + d.id;});
+
+      permit_rows.on('click', displayExtraInfo);
+
       }  
+
+      
 
       // var detailed_info = d3.select("#detailed_info");
 
       // console.log(detailed_info.select("#" + state));
 
+
+  }
+
+  function displayExtraInfo(row){
+    d3.selectAll(".permit_line")
+      .style("stroke", "#fff")
+      .style("stroke-width",1);
+    d3.select("#permit_line" + row["id"])
+      .style("stroke", "#ACFF21")
+      .style("stroke-width",2);
+    var info = [];
+    if (row["notes1"]){
+      info.push(row["notes1"]);
+    }
+    if (row["notes2"]){
+      info.push(row["notes2"]);
+    }
+    if (row["notes3"]){
+      info.push(row["notes3"]);
+    }
+    if (info.length == 0){
+      info.push("No additional notes");
+    }
+    d3.select("#detailed_info_list").remove();
+    d3.select("#detailed_info")
+      .append("ul")
+      .attr("id","detailed_info_list")
+      .style("width", "400px")
+      .selectAll(".detailed_info_list_item")
+        .data(info)
+          .enter().append("li")
+          .attr("class", "detailed_info_list_item")
+          .html(function(d){return d;})
+          .style("font-family", "Roboto-light")
+          .style("font-size", "11px");
 
   }
 
@@ -408,10 +410,11 @@
       .enter().append("rect")
         .attr("class", "permit_cell")
         .attr("x", function(d,i) { 
-          return info_x_scale(i); 
+          return info_x_scale(i) + 6; 
         })
+        .attr("y", "16px")
         .attr("width", info_x_scale.rangeBand())
-        .attr("height", info_y_scale.rangeBand())
+        .attr("height", info_y_scale.rangeBand()-15)
         .style("fill", function(d, i) { 
           if ( 0 <= i && i <= 3){
             return d == 1 ? "#4A4CFF" : "#ECEDFF" ;
@@ -452,10 +455,9 @@
       // .style("stroke-width","0");
     d3.select("#state_name").text("");
     d3.select("#info").style("display", "none");
+    d3.select("#detailed_info_list").remove();
   }
 
-  d3.select("#info")
-    .on('click', removeHighlight);
 
   currentOrder = d3.range(109); //hard coded number of rows
 
