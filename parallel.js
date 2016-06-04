@@ -49,7 +49,8 @@ d3.csv("data/parallel_dat3.csv", function(error, states) {
       .data(states)
     .enter().append("path")
       .attr("d", path)
-      .on('click', highlightState);
+      .on('click', highlightState)
+      .style("stroke", function(d){return abrv_to_color[d["State"]];});;
 
   // Add blue foreground lines for focus.
   foreground = p_svg.append("g")
@@ -58,7 +59,7 @@ d3.csv("data/parallel_dat3.csv", function(error, states) {
       .data(states)
     .enter().append("path")
       .attr("d", path)
-      .on('click', highlightState);;
+      .on('click', highlightState);
     
 
   d3.select(".foreground")
