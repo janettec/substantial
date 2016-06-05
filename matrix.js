@@ -1,3 +1,6 @@
+// (Heavily) modified code from Mike Bostock's Les Miserables Co-occurence
+// https://bost.ocks.org/mike/miserables/
+
 
 function matrix(json) {
   var rows = [];
@@ -52,13 +55,6 @@ function matrix(json) {
       .attr("transform", function(d, i) { return "translate(0," + y_scale(i) + ")"; })
       .on('click', highlightRow)
       .each(row);
-
-  // row.append("text")
-  //     .attr("x", -6)
-  //     .attr("y", y.rangeBand() / 2)
-  //     .attr("dy", ".32em")
-  //     .attr("text-anchor", "end")
-  //     .text(function(d) { return d.type_of_auth; });
 
   function getValArray(obj){
     valArr = [];
