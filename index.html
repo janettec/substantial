@@ -15,7 +15,7 @@
 
 <div><div class = "title_accent" style = "margin-right:6px; width:10%">green</div><div class = "title">THE <span id = "emp">(UNGREAT)</span> STATE OF SUBSTITUTE TEACHING TODAY</div><div class = "title_accent" style = "margin-left:6px; width:100%">green</div></div>
 
-<div style = "margin-left:40px; margin-bottom: 10px"> Click on rows, lines or states. On the rows, click on 1 row, and shift-click on another to select all the rows in between</div>
+<div style = "margin-left:40px; margin-bottom: 15px"> Click on rows, lines, or states. For the rows, click on 1 row and shift-click on another to select all the rows in between. Click on the column headers to sort rows by a requirement (e.g. "High school/GED").</div>
 
 <div id = "left">
 <div id = "axis_label_div"></div>
@@ -317,6 +317,7 @@
     d3.select("#permits").text("");
     d3.select("#permit_svg").remove(); //remove rows from last state
     if(rows[0].type_of_auth == "N/A") {
+      d3.select("#detailed_info_instr").remove();
       d3.select("#permits").text("No state-level standards (only school district-level standards)");
     } else {
       var permit_svg = d3.select("#permits").append("svg") //doesn't want to load and IDK why
@@ -355,6 +356,11 @@
         .attr("class", "permit_line")
         .attr("id", function(d){return "permit_line" + d.id;});
 
+      d3.select("#detailed_info")
+        .append("span")
+        .attr("id", "detailed_info_instr")
+        .text("Click on permit (to the left) to see additional notes.");
+
       permit_rows.on('click', displayExtraInfo);
 
       }  
@@ -388,6 +394,7 @@
     if (info.length == 0){
       info.push("No additional notes");
     }
+    d3.select("#detailed_info_instr").remove();
     d3.select("#detailed_info_list").remove();
     d3.select("#detailed_info")
       .append("ul")
@@ -399,7 +406,7 @@
           .attr("class", "detailed_info_list_item")
           .html(function(d){return d;})
           .style("font-family", "Roboto-light")
-          .style("font-size", "11px");
+          .style("font-size", "13px");
 
   }
 
@@ -456,6 +463,7 @@
     d3.select("#state_name").text("");
     d3.select("#info").style("display", "none");
     d3.select("#detailed_info_list").remove();
+    d3.select("#detailed_info_instr").remove();
   }
 
 
